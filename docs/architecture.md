@@ -174,3 +174,71 @@
     │ Database │      │ External │      │  Redis   │
     │ (SQLite) │      │   API    │      │ (Memory) │
     └──────────┘      └──────────┘      └──────────┘
+[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+ENTITY Note {
+  // PRIMARY KEY
+  PROPERTY Id: INTEGER
+    ATTRIBUTES: [PrimaryKey, DatabaseGenerated(Identity)]
+    PURPOSE: Unique identifier for API routes
+    EXAMPLE: /api/notes/123
+  
+  // CORE CONTENT
+  PROPERTY Title: STRING
+    ATTRIBUTES: [Required, MaxLength(500)]
+    VALIDATION: NOT null, NOT empty, NOT whitespace_only
+    PURPOSE: Human-readable name
+    EXAMPLE: "My First Markdown Note"
+  
+  PROPERTY Content: STRING
+    ATTRIBUTES: [Required, MaxLength(10485760)]  // 10MB limit
+    VALIDATION: NOT null, NOT empty
+    PURPOSE: Raw markdown text
+    EXAMPLE: "# Hello\n\nThis is **bold**"
+  
+  // INTEGRITY & CACHING
+  PROPERTY ContentHash: STRING
+    ATTRIBUTES: [Required, MaxLength(64)]
+    PURPOSE: SHA256 hash for change detection & cache invalidation
+    COMPUTED: SHA256(Content)
+    USAGE:
+      IF stored_hash != computed_hash THEN
+        content_has_changed = TRUE
+        invalidate_caches()
+  
+  // AUDIT TIMESTAMPS
+  PROPERTY CreatedAt: DATETIME
+    ATTRIBUTES: [Required]
+    DEFAULT: DateTime.UtcNow
+    IMMUTABLE: Never changes after creation
+    PURPOSE: Track when note was created, sorting
+  
+  PROPERTY UpdatedAt: DATETIME
+    ATTRIBUTES: [Required]
+    DEFAULT: DateTime.UtcNow
+    UPDATE: Set to DateTime.UtcNow on every modification
+    PURPOSE: Track last modification, cache invalidation trigger
+  
+  // SOFT DELETE
+  PROPERTY IsDeleted: BOOLEAN
+    ATTRIBUTES: [Required]
+    DEFAULT: FALSE
+    PURPOSE: Hide from normal queries without actual deletion
+    BENEFIT: Can restore, maintain referential integrity
+    QUERY_FILTER: WHERE IsDeleted = FALSE (in most endpoints)
+  
+  PROPERTY DeletedAt: DATETIME?
+    ATTRIBUTES: [Nullable]
+    DEFAULT: NULL
+    SET_WHEN: IsDeleted = TRUE
+    PURPOSE: Track deletion time for cleanup jobs
+    
+  // NAVIGATION PROPERTIES (if using EF Core)
+  PROPERTY UserId: INTEGER?
+    ATTRIBUTES: [ForeignKey("User")]
+    PURPOSE: Multi-user support (if implementing auth)
+    NULL_IF: No authentication
+  
+  PROPERTY User: User?
+    ATTRIBUTES: [Navigation]
+    PURPOSE: Access user information
+}
