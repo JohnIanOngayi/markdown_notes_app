@@ -1,4 +1,7 @@
+using markdown_notes_app.Core.Interfaces.Common;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Text.Json;
 
 namespace markdown_notes_app.API.Controllers
 {
@@ -11,19 +14,28 @@ namespace markdown_notes_app.API.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILoggerManager loggerManager;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILoggerManager logger)
         {
-            _logger = logger;
+            loggerManager = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("{id}")]
+        public IEnumerable<WeatherForecast> Get(int id)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            WeatherForecast ab = new WeatherForecast
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(id)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            };
+
+            loggerManager.LogInfo(JsonSerializer.Serialize(ab).ToString());
+
+            return Enumerable.Range(1, 5).Select(id => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(id)),
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })

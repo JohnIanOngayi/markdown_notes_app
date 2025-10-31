@@ -1,5 +1,6 @@
 using markdown_notes_app.API.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using NLog;
 
 internal class Program
 {
@@ -7,7 +8,10 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+
         // Add services to the container.
+        builder.Services.ConfigureLoggerService();
         builder.Services.ConfigureCORS();
         builder.Services.ConfigureIISIntegrations();
 

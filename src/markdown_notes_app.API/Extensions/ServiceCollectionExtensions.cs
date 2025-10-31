@@ -1,4 +1,7 @@
-﻿namespace markdown_notes_app.API.Extensions
+﻿using markdown_notes_app.Core.Interfaces.Common;
+using markdown_notes_app.Infrastructure.Logging;
+
+namespace markdown_notes_app.API.Extensions
 {
     /// <summary>
     /// Provides extension methods to register and configure framework-level services
@@ -41,6 +44,18 @@
         public static void ConfigureIISIntegrations(this IServiceCollection services)
         {
             services.Configure<IISOptions>(options => { });
+        }
+
+        /// <summary>
+        /// Configures Logging Using NLog
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
+        /// <remarks>
+        /// Plan to improve per layer and class for more robustness
+        /// </remarks>
+        public static void ConfigureLoggerService(this IServiceCollection services)
+        {
+            services.AddSingleton<ILoggerManager, LoggerManager>();
         }
     }
 }

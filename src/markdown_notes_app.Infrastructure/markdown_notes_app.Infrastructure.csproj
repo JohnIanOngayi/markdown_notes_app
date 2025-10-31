@@ -1,14 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NLog" Version="6.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\markdown_notes_app.Core\markdown_notes_app.Core.csproj" />
-    <ProjectReference Include="..\markdown_notes_app.Infrastructure\markdown_notes_app.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
