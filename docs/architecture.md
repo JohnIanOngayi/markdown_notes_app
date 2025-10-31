@@ -30,6 +30,8 @@
 │   │   │   │   ├── IGrammarCheckService.cs
 │   │   │   │   ├── IMarkdownRenderService.cs
 │   │   │   │   └── INoteProcessingService.cs
+│   │   │   ├── Common/
+│   │   │   │   ├── ILoggerService.cs
 │   │   │   └── Repositories/
 │   │   │       └── INoteRepository.cs
 │   │   ├── DTOs/
@@ -71,6 +73,9 @@
 │       ├── ExternalServices/
 │       │   ├── SaplingApiClient.cs
 │       │   └── SaplingApiOptions.cs
+│       ├── Logging/
+│       │   ├── LoggerService.cs
+│       │   └── LoggerConfiguration.cs
 │       └── Caching/
 │           ├── CacheService.cs
 │           └── ICacheService.cs
