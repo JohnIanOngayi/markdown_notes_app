@@ -14,9 +14,9 @@ namespace markdown_notes_app.API.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILoggerManager loggerManager;
+        private readonly ILoggerManager<WeatherForecastController> loggerManager;
 
-        public WeatherForecastController(ILoggerManager logger)
+        public WeatherForecastController(ILoggerManager<WeatherForecastController> logger)
         {
             loggerManager = logger;
         }

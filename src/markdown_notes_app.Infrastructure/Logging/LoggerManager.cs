@@ -3,7 +3,7 @@ using NLog;
 
 namespace markdown_notes_app.Infrastructure.Logging
 {
-    public class LoggerManager: ILoggerManager
+    public class LoggerManager<T>: ILoggerManager<T> where T : class
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         public void LogDebug(string message)

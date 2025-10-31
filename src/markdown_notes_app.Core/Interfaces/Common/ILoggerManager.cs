@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace markdown_notes_app.Core.Interfaces.Common
 {
-    public interface ILoggerManager
+    public interface ILoggerManager<T> where T : class
     {
         void LogDebug(string message);
         void LogInfo(string message);
