@@ -1,0 +1,46 @@
+﻿namespace markdown_notes_app.API.Extensions
+{
+    /// <summary>
+    /// Provides extension methods to register and configure framework-level services
+    /// used by the API project (CORS, IIS integrations, etc.).
+    /// </summary>
+    /// <remarks>
+    /// These extensions centralize service registration so they can be called from a single
+    /// location (for example in `Program.cs` or the application's startup sequence).
+    /// </remarks>
+    public static class ServiceCollectionExtensions
+    {
+        /// <summary>
+        /// Registers a CORS policy named "CORSPolicy".
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the CORS policy to.</param>
+        /// <remarks>
+        /// The registered policy is permissive: it allows any origin, any HTTP method and any header.
+        /// This is convenient for development and cross-origin testing but should be restricted
+        /// for production scenarios to specific origins, methods, and headers as appropriate.
+        /// </remarks>
+        public static void ConfigureCORS(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CORSPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+        }
+
+        /// <summary>
+        /// Configures IIS integration options.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
+        /// <remarks>
+        /// The configuration is intentionally left empty to provide a single location where
+        /// IIS-specific options can be adjusted if needed (for example when hosting behind IIS).
+        /// </remarks>
+        public static void ConfigureIISIntegrations(this IServiceCollection services)
+        {
+            services.Configure<IISOptions>(options => { });
+        }
+    }
+}
