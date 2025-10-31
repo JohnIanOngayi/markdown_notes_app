@@ -1,6 +1,11 @@
 ﻿using markdown_notes_app.API.Controllers;
 using markdown_notes_app.Core.Interfaces.Common;
+using markdown_notes_app.Infrastructure.Data;
 using markdown_notes_app.Infrastructure.Logging;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql;
+using Microsoft.EntityFrameworkCore.Design;
+using System;
 
 namespace markdown_notes_app.API.Extensions
 {
@@ -57,6 +62,21 @@ namespace markdown_notes_app.API.Extensions
         public static void ConfigureLoggerService(this IServiceCollection services)
         {
             services.AddSingleton<ILoggerManager<WeatherForecastController>, LoggerManager<WeatherForecastController>>();
+        }
+
+        /// <summary>
+        /// Configures the mysql db for the application
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
+        /// <param name="configuration">The <see cref="IConfiguration"/> to configure.</param>
+        public static void ConfigureMySQLContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<ApplicationDbContext>(
+                options => { 
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)); 
+                });
         }
     }
 }

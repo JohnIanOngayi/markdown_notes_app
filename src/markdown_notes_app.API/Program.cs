@@ -15,6 +15,8 @@ internal class Program
         builder.Services.ConfigureCORS();
         builder.Services.ConfigureIISIntegrations();
 
+        builder.Services.ConfigureMySQLContext(builder.Configuration);
+
         builder.Services.AddControllers();
 
         var app = builder.Build();
