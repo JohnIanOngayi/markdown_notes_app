@@ -1,11 +1,11 @@
 ﻿using markdown_notes_app.API.Controllers;
 using markdown_notes_app.Core.Interfaces.Common;
-using markdown_notes_app.Infrastructure.Data;
 using markdown_notes_app.Infrastructure.Logging;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
 using Microsoft.EntityFrameworkCore.Design;
 using System;
+using markdown_notes_app.Infrastructure.Data.Database;
 
 namespace markdown_notes_app.API.Extensions
 {
@@ -74,8 +74,11 @@ namespace markdown_notes_app.API.Extensions
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<ApplicationDbContext>(
-                options => { 
-                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)); 
+                options =>
+                {
+                    options
+                    .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+                    .AddInterceptors(new SoftDeleteInterceptor()); // Add as scoped service when implementing ContextPooling !!!
                 });
         }
     }

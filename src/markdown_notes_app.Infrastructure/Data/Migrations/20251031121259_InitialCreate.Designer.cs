@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using markdown_notes_app.Infrastructure.Data;
+using markdown_notes_app.Infrastructure.Data.Database;
 
 #nullable disable
 
