@@ -58,7 +58,7 @@
 │   │   │   └── NoteProcessingService.cs
 │   │   ├── Mapping/
 │   │   │   └── MappingProfile.cs (AutoMapper)
-│   │   └── Validators/
+│   │   └── Validators/ 
 │   │       ├── CreateNoteRequestValidator.cs
 │   │       └── UpdateNoteRequestValidator.cs
 │   │
