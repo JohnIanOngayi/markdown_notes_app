@@ -24,6 +24,9 @@
 │   │   ├── Entities/
 │   │   │   ├── Note.cs
 │   │   │   └── NoteVersion.cs (if versioning)
+│   │   ├── Reults/
+│   │   │   ├── SaplingResponse.cs
+│   │   │   └── ResultFactory.cs
 │   │   ├── Interfaces/
 │   │   │   ├── Services/
 │   │   │   │   ├── INoteService.cs
@@ -58,7 +61,7 @@
 │   │   │   └── NoteProcessingService.cs
 │   │   ├── Mapping/
 │   │   │   └── MappingProfile.cs (AutoMapper)
-│   │   └── Validators/ 
+│   │   └── Validators/     
 │   │       ├── CreateNoteRequestValidator.cs
 │   │       └── UpdateNoteRequestValidator.cs
 │   │
@@ -246,3 +249,38 @@ ENTITY Note {
         ATTRIBUTES: [Navigation]
         PURPOSE: Access user information
 }
+
+
+## API and CACHING
+
+Pattern: {resource}:{id}:{operation}
+Examples:
+- note:123:html
+- note:123:grammar
+- note:456:html
+
+Include version/hash if content changes:
+- note:123:html:{contentHash}
+```
+
+**Cache Invalidation:**
+- When note is updated → invalidate all cache entries for that note
+- Pattern matching: Delete `note:123:*`
+
+**My Recommendation**: Start WITHOUT Redis, use IMemoryCache. Add Redis later if you want to learn distributed caching specifically.
+
+## 4. API Design Considerations
+
+Your endpoint structure is good, but consider these refinements:
+
+**RESTful Naming:**
+```
+GET    /api/notes              - List all notes
+POST   /api/notes              - Create new note
+GET    /api/notes/{id}         - Get specific note (markdown)
+PUT    /api/notes/{id}         - Update note
+DELETE /api/notes/{id}         - Delete note
+
+GET    /api/notes/{id}/html    - Get rendered HTML
+POST   /api/notes/{id}/grammar - Check grammar (POST because it might modify/annotate)
+POST   /api/notes/{id}/process - Grammar check + render

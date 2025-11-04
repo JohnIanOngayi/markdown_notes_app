@@ -77,10 +77,14 @@ namespace markdown_notes_app.Infrastructure.ExternalServices
     {
         private readonly IHttpClientFactory _httpClientFactory;
         //private readonly string _apiKey; //32 characters
-        //private readonly ILoggerManager<SaplingAPIClient> loggerManager;
-        public SaplingAPIClient(IHttpClientFactory httpClientFactory)
+        private readonly ILoggerManager<SaplingAPIClient> _loggerManager;
+        private readonly string saplingApiBaseURL = "";
+        public SaplingAPIClient(IHttpClientFactory httpClientFactory, ILoggerManager<SaplingAPIClient> logger)
         {
             _httpClientFactory = httpClientFactory;
+            _loggerManager = logger;
         }
+
+        public IActionResult GetStatus()
     }
 }
