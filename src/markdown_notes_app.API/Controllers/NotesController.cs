@@ -6,6 +6,8 @@ namespace markdown_notes_app.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
+    // Needs to return string
     public class NotesController : Controller
     {
         private readonly ILoggerManager<NotesController> _loggerManager;

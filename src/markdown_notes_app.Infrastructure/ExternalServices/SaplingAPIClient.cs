@@ -90,7 +90,7 @@ namespace markdown_notes_app.Infrastructure.ExternalServices
             _loggerManager = logger;
         }
 
-        public async Task<Result<SaplingResponse>>? PostSpellCheck(string text, object jsonBody)
+        public async Task<Result<SaplingResponse>>? PostSpellCheckAsync(string text, object jsonBody)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace markdown_notes_app.Infrastructure.ExternalServices
                 if (!response.IsSuccessStatusCode)
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    return ResultFactory.Error<SaplingResponse>(errorContent, "", (int)response.StatusCode, "API Request Failed");
+                    return ResultFactory.Error<SaplingResponse>(errorContent, (int)response.StatusCode, "API Request Failed");
                 }
 
                 var jsonContent = await response.Content.ReadAsStringAsync();
@@ -110,13 +110,13 @@ namespace markdown_notes_app.Infrastructure.ExternalServices
             }
             catch (HttpRequestException httpEx)
             {
-                //log
-                return ResultFactory.Exception<SaplingResponse>(httpEx.Message, "", 500, "Network Error");
+                //log - More Robust Errors Saying Where My Error is
+                return ResultFactory.Exception<SaplingResponse>(httpEx.Message, 500, "Network Error");
             }
             catch (Exception ex)
             {
                 //log
-                return ResultFactory.Exception<SaplingResponse>(ex.Message, "", 500, "Server Failure");
+                return ResultFactory.Exception<SaplingResponse>(ex.Message, 500, "Server Failure");
             }
         }
 

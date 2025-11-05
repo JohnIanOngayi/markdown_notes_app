@@ -31,8 +31,7 @@
 │   │   │   ├── Services/
 │   │   │   │   ├── INoteService.cs
 │   │   │   │   ├── IGrammarCheckService.cs
-│   │   │   │   ├── IMarkdownRenderService.cs
-│   │   │   │   └── INoteProcessingService.cs
+│   │   │   │   └── IMarkdownRenderService.cs
 │   │   │   ├── Common/
 │   │   │   │   ├── ILoggerService.cs
 │   │   │   └── Repositories/
@@ -57,8 +56,7 @@
 │   │   ├── Services/
 │   │   │   ├── NoteService.cs
 │   │   │   ├── GrammarCheckService.cs
-│   │   │   ├── MarkdownRenderService.cs
-│   │   │   └── NoteProcessingService.cs
+│   │   │   └── MarkdownRenderService.cs
 │   │   ├── Mapping/
 │   │   │   └── MappingProfile.cs (AutoMapper)
 │   │   └── Validators/     
@@ -148,7 +146,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                     API LAYER                               │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │   Notes      │  │  Exception   │  │   Request    │       │
+│  │   Notes      │  │  Exception   │  │   Request    │       │ Format Response Object
 │  │  Controller  │  │  Middleware  │  │   Logging    │       │
 │  └──────┬───────┘  └──────────────┘  └──────────────┘       │
 └─────────┼───────────────────────────────────────────────────┘
@@ -158,7 +156,7 @@
 │                   APPLICATION LAYER                         │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
 │  │    Note      │  │   Grammar    │  │   Markdown   │       │
-│  │   Service    │  │    Check     │  │    Render    │       │
+│  │   Service    │  │    Check     │  │    Render    │       │ Parse Data
 │  │              │  │   Service    │  │   Service    │       │
 │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘       │
 └─────────┼─────────────────┼─────────────────┼───────────────┘
@@ -168,7 +166,7 @@
 │                 INFRASTRUCTURE LAYER                        │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
 │  │     Note     │  │   Sapling    │  │    Cache     │       │
-│  │  Repository  │  │  API Client  │  │   Service    │       │
+│  │  Repository  │  │  API Client  │  │   Service    │       │ Return Raw Response
 │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘       │
 └─────────┼─────────────────┼─────────────────┼───────────────┘
           │                 │                 │
