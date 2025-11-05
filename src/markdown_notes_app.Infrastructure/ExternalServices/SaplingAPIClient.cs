@@ -1,8 +1,13 @@
-﻿using markdown_notes_app.Core.Interfaces.Common;
+﻿using markdown_notes_app.Core.Entities;
+using markdown_notes_app.Core.Interfaces.Common;
+using markdown_notes_app.Core.Results;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace markdown_notes_app.Infrastructure.ExternalServices
@@ -76,15 +81,44 @@ namespace markdown_notes_app.Infrastructure.ExternalServices
     public class SaplingAPIClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        //private readonly string _apiKey; //32 characters
+        private readonly string _apiKey = "";
         private readonly ILoggerManager<SaplingAPIClient> _loggerManager;
-        private readonly string saplingApiBaseURL = "";
+        private readonly string saplingApiBaseURL = "https://api.sapling.ai/api/v1/spellcheck";
         public SaplingAPIClient(IHttpClientFactory httpClientFactory, ILoggerManager<SaplingAPIClient> logger)
         {
             _httpClientFactory = httpClientFactory;
             _loggerManager = logger;
         }
 
-        public IActionResult GetStatus()
+        public async Task<Result<SaplingResponse>>? PostSpellCheck(string text, object jsonBody)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient("SaplingAPIClient");
+                var response = await client.PostAsJsonAsync($@"{saplingApiBaseURL}?key={_apiKey}", jsonBody);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    return ResultFactory.Error<SaplingResponse>(errorContent, "", (int)response.StatusCode, "API Request Failed");
+                }
+
+                var jsonContent = await response.Content.ReadAsStringAsync();
+                var saplingResp = JsonSerializer.Deserialize<SaplingResponse>(jsonContent);
+
+                return ResultFactory.Success<SaplingResponse>(saplingResp);
+            }
+            catch (HttpRequestException httpEx)
+            {
+                //log
+                return ResultFactory.Exception<SaplingResponse>(httpEx.Message, "", 500, "Network Error");
+            }
+            catch (Exception ex)
+            {
+                //log
+                return ResultFactory.Exception<SaplingResponse>(ex.Message, "", 500, "Server Failure");
+            }
+        }
+
     }
 }

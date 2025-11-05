@@ -61,7 +61,7 @@ namespace markdown_notes_app.API.Extensions
         /// </remarks>
         public static void ConfigureLoggerService(this IServiceCollection services)
         {
-            services.AddSingleton<ILoggerManager<WeatherForecastController>, LoggerManager<WeatherForecastController>>();
+            services.AddSingleton<ILoggerManager<NotesController>, LoggerManager<NotesController>>();
         }
 
         /// <summary>
